@@ -154,6 +154,69 @@ namespace HeistII
             Console.WriteLine($"Bank Recon Report");
             Console.WriteLine($@"Most Secure: {mostSecure.Key}
 Least Secure: {leastSecure.Key}");
+
+            List<IRobber> crew = new List<IRobber>();
+            int remainingLoot = newBank.CashOnHand;
+            Console.WriteLine($"You now have {rolodex.Count} operatives to choose from");
+
+
+
+            while (true)
+            {
+                List<IRobber> availableOperatives = new List<IRobber>();
+                int index = 1;
+                foreach (IRobber operative in rolodex)
+                {
+                    if (remainingLoot > operative.PercentageCut / 100m * newBank.CashOnHand && !crew.Contains(operative))
+                    {
+                        availableOperatives.Add(operative);
+                        Console.WriteLine(@$"{index}. Name: {operative.Name}
+                Specialty: {operative.Specialty}
+                Skill Level: {operative.SkillLevel}
+                Desired Percentage cut: {operative.PercentageCut}%");
+                        index += 1;
+                    }
+                }
+
+                if(availableOperatives.Count == 0)
+                {
+                    Console.WriteLine("There are no operatives left for you to choose from");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Pick your operatives for the heist");
+
+                    string response = Console.ReadLine();
+                    if (response == "")
+                    {
+                        break;
+                    }
+
+                    int option;
+                    while (!int.TryParse(response, out option) || option < 1 || option > rolodex.Count)
+                    {
+                        Console.WriteLine("Invalid response. Please enter a valid option.");
+                        response = Console.ReadLine();
+                    }
+
+                    crew.Add(availableOperatives[option - 1]);
+
+                    remainingLoot -= (int)(rolodex[option - 1].PercentageCut / 100m * remainingLoot);
+                }
+               
+            }
+
+            Console.WriteLine("List of crew members:");
+            int sn = 1;
+            foreach (IRobber operative in crew)
+            {
+                Console.WriteLine(@$"{sn}. Name: {operative.Name}
+                Specialty: {operative.Specialty}
+                Skill Level: {operative.SkillLevel}
+                Desired Percentage cut: {operative.PercentageCut}%");
+                sn += 1;
+            }
         }
     }
 }

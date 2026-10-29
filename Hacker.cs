@@ -19,5 +19,7 @@ namespace HeistII
                 Console.WriteLine($"{Name} has disabled the alarm system!");
             }
         }
+
+        public string Specialty { get; } = "Hacker";
     }
 }

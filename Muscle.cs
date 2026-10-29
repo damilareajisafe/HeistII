@@ -19,5 +19,7 @@ namespace HeistII
                 Console.WriteLine($"{Name} has neutralized the guards!");
             }
         }
+
+        public string Specialty { get; } = "Muscle";
     }
 }

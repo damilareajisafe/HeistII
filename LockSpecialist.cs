@@ -18,5 +18,7 @@ namespace HeistII
                 Console.WriteLine($"{Name} has successfuly cracked the vault!");
             }
         }
+
+        public string Specialty { get; } = "Lock Specialist";
     }
 }
