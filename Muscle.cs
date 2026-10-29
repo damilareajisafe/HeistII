@@ -11,10 +11,9 @@ namespace HeistII
         public int PercentageCut { get; set; } = 5;
         public void PerformSkill(Bank bank)
         {
-            int securityScore = bank.SecurityGuardScore;
-            securityScore -= SkillLevel;
-            Console.WriteLine($"{Name} is handling the security guards. Decreased security {securityScore} points");
-            if (securityScore <= 0)
+            bank.SecurityGuardScore -= SkillLevel;
+            Console.WriteLine($"{Name} is handling the security guards. Decreased security {SkillLevel} points");
+            if (bank.SecurityGuardScore <= 0)
             {
                 Console.WriteLine($"{Name} has neutralized the guards!");
             }

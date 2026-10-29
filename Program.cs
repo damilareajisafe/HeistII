@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using Microsoft.VisualBasic.FileIO;
+using System.Xml.Linq;
 
 namespace HeistII
 {
@@ -167,7 +168,7 @@ Least Secure: {leastSecure.Key}");
                 int index = 1;
                 foreach (IRobber operative in rolodex)
                 {
-                    if (remainingLoot > operative.PercentageCut / 100m * newBank.CashOnHand && !crew.Contains(operative))
+                    if (remainingLoot >= operative.PercentageCut / 100m * newBank.CashOnHand && !crew.Contains(operative))
                     {
                         availableOperatives.Add(operative);
                         Console.WriteLine(@$"{index}. Name: {operative.Name}
@@ -194,7 +195,7 @@ Least Secure: {leastSecure.Key}");
                     }
 
                     int option;
-                    while (!int.TryParse(response, out option) || option < 1 || option > rolodex.Count)
+                    while (!int.TryParse(response, out option) || option < 1 || option > availableOperatives.Count)
                     {
                         Console.WriteLine("Invalid response. Please enter a valid option.");
                         response = Console.ReadLine();
@@ -202,12 +203,13 @@ Least Secure: {leastSecure.Key}");
 
                     crew.Add(availableOperatives[option - 1]);
 
-                    remainingLoot -= (int)(rolodex[option - 1].PercentageCut / 100m * remainingLoot);
+                    remainingLoot -= (int)(availableOperatives[option - 1].PercentageCut / 100m * newBank.CashOnHand);
+
                 }
                
             }
 
-            Console.WriteLine("List of crew members:");
+            Console.WriteLine("List of your crew members:");
             int sn = 1;
             foreach (IRobber operative in crew)
             {
@@ -216,6 +218,28 @@ Least Secure: {leastSecure.Key}");
                 Skill Level: {operative.SkillLevel}
                 Desired Percentage cut: {operative.PercentageCut}%");
                 sn += 1;
+            }
+
+            foreach (IRobber op in crew)
+            {
+                op.PerformSkill(newBank);
+            }
+
+            if (newBank.IsSecure)
+            {
+                Console.WriteLine("The heist was a failure!");
+            }
+            else
+            {
+                Console.WriteLine("The heist was a success! See each member's take below");
+                int serialNum = 1;
+                foreach (IRobber operative in crew)
+                {
+                    Console.WriteLine(@$"{serialNum}. Name: {operative.Name}
+                Specialty: {operative.Specialty}
+                Share of Loot: ${operative.PercentageCut / 100m * newBank.CashOnHand}");
+                    serialNum += 1;
+                }
             }
         }
     }
