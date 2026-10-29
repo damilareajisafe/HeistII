@@ -113,17 +113,47 @@ namespace HeistII
                 rolodex.Add(newOperative);
             }
 
-            Console.WriteLine($"You now have {rolodex.Count} operatives to choose from");
-            Console.WriteLine("Here is the list:.");
-            int sn = 1;
-            foreach(IRobber operative in rolodex)
+            //            Console.WriteLine($"You now have {rolodex.Count} operatives to choose from");
+            //            Console.WriteLine("Here is the list:.");
+            //            int sn = 1;
+            //            foreach(IRobber operative in rolodex)
+            //            {
+            //                Console.WriteLine(@$"{sn}. Name: {operative.Name}
+            //Specialty: {operative.GetType().Name}
+            //Skill Level: {operative.SkillLevel}
+            //Desired Percentage cut: {operative.PercentageCut}%");
+            //                sn += 1;
+            //            }
+
+            Bank newBank = new Bank();
+            newBank.AlarmScore = new Random().Next(101);
+            newBank.VaultScore = new Random().Next(101);
+            newBank.SecurityGuardScore = new Random().Next(101);
+            newBank.CashOnHand = new Random().Next(50000, 1000001);
+
+            //List<int> scores = new List<int>
+            //{
+            //    newBank.AlarmScore,
+            //    newBank.VaultScore,
+            //    newBank.SecurityGuardScore
+            //};
+
+            //int mostSecure = scores.Max();
+            //int leastSecure = scores.Min();
+
+            Dictionary<string, int> securityScores = new Dictionary<string, int>
             {
-                Console.WriteLine(@$"{sn}. Name: {operative.Name}
-Specialty: {operative.GetType().Name}
-Skill Level: {operative.SkillLevel}
-Desired Percentage cut: {operative.PercentageCut}%");
-                sn += 1;
-            }
+                {"Alarm", newBank.AlarmScore},
+                {"Vault", newBank.VaultScore},
+                {"Security Guards", newBank.SecurityGuardScore}
+            };
+
+            KeyValuePair<string, int> mostSecure = securityScores.MaxBy(pair => pair.Value);
+            KeyValuePair<string, int> leastSecure = securityScores.MinBy(pair => pair.Value);
+
+            Console.WriteLine($"Bank Recon Report");
+            Console.WriteLine($@"Most Secure: {mostSecure.Key}
+Least Secure: {leastSecure.Key}");
         }
     }
 }
